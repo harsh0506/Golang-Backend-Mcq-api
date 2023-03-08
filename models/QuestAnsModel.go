@@ -10,4 +10,5 @@ type MCQ struct {
 	O3       string
 	O4       string
 	Ans      string
+	Sub      string
 }

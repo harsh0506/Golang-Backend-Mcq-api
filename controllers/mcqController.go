@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"simple-crud-api/initializers"
 	"simple-crud-api/models"
 
@@ -16,12 +17,13 @@ func McqsCreate(c *gin.Context) {
 		O3       string
 		O4       string
 		Ans      string
+		Sub      string
 	}
 
 	c.Bind(&Body)
 
 	//create a mcq
-	mcq := models.MCQ{Question: Body.Question, O1: Body.O1, O2: Body.O2, O3: Body.O3, O4: Body.O4, Ans: Body.Ans}
+	mcq := models.MCQ{Question: Body.Question, O1: Body.O1, O2: Body.O2, O3: Body.O3, O4: Body.O4, Ans: Body.Ans, Sub: Body.Sub}
 
 	result := initializers.DB.Create(&mcq)
 
@@ -59,6 +61,20 @@ func ReturnSingleMcq(c *gin.Context) {
 	})
 }
 
+func ReturnSingleMcqwITHsUB(c *gin.Context) {
+	//get id from url
+	sub := c.Param("sub")
+	fmt.Print(sub)
+
+	var mcq []models.MCQ
+	initializers.DB.Raw("SELECT * FROM mcqs WHERE sub = ?", sub).Scan(&mcq)
+
+	//reurn it
+	c.JSON(200, gin.H{
+		"mcq": mcq,
+	})
+}
+
 func Update(c *gin.Context) {
 	//get id from url
 	id := c.Param("id")
@@ -71,6 +87,7 @@ func Update(c *gin.Context) {
 		O3       string
 		O4       string
 		Ans      string
+		Sub      string
 	}
 
 	c.Bind(&Body)
@@ -82,7 +99,7 @@ func Update(c *gin.Context) {
 	//update it
 	// Update attributes with `struct`, will only update non-zero fields
 	initializers.DB.Model(&mcq).Updates(models.MCQ{
-		Question: Body.Question, O1: Body.O1, O2: Body.O2, O3: Body.O3, O4: Body.O4, Ans: Body.Ans,
+		Question: Body.Question, O1: Body.O1, O2: Body.O2, O3: Body.O3, O4: Body.O4, Ans: Body.Ans, Sub: Body.Sub,
 	})
 
 	//save it
