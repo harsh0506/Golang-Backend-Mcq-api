@@ -53,69 +53,70 @@
 </head>
 
 <body>
-  <div class="container">
-    <h1>Quiz Subjects</h1>
-    <select id="subjectSelect">
-      <option value="">Select Subject</option>
-      <!-- Replace the options with your subject data -->
-      <option value="subject1">Subject 1</option>
-      <option value="subject2">Subject 2</option>
-      <option value="subject3">Subject 3</option>
-    </select>
-    <table id="quizTable">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Question</th>
-          <th>Options</th>
-          <th>Answer</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Quiz data will be dynamically populated here based on the selected subject -->
-      </tbody>
-    </table>
-  </div>
-
-  <script>
-    const subjectSelect = document.getElementById('subjectSelect');
-    const quizTable = document.getElementById('quizTable');
-
-    // Event listener for subject selection
-    subjectSelect.addEventListener('change', (event) => {
-      const selectedSubject = event.target.value;
-      fetchQuizData(selectedSubject);
-    });
-
-    // Function to fetch quiz data based on the selected subject
-    function fetchQuizData(subject) {
-      // Replace the API endpoint with your actual API endpoint to fetch quiz data based on the subject
-      const apiUrl = `/MCQ-sub/${subject}`;
-
-      // Fetch quiz data from the API endpoint
-      fetch(apiUrl)
+    <div class="container">
+      <h1>Quiz Subjects</h1>
+      <select id="subjectSelect">
+        <option value="">Select Subject</option>
+      </select>
+      <table id="quizTable">
+        <!-- Your table structure -->
+      </table>
+    </div>
+  
+    <script>
+      const subjectSelect = document.getElementById('subjectSelect');
+      const quizTable = document.getElementById('quizTable');
+  
+      // Fetch subjects and populate the select dropdown
+      fetch('/MCQ-subjectsArray')
         .then(response => response.json())
         .then(data => {
-          // Clear previous table data
-          quizTable.tBodies[0].innerHTML = '';
-
-          // Populate table with new quiz data
-          data.forEach(quiz => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-              <td>${quiz.id}</td>
-              <td>${quiz.question}</td>
-              <td>${quiz.options}</td>
-              <td>${quiz.answer}</td>
-            `;
-            quizTable.tBodies[0].appendChild(row);
+          data.forEach(subject => {
+            const option = document.createElement('option');
+            option.value = subject;
+            option.textContent = subject;
+            subjectSelect.appendChild(option);
           });
         })
         .catch(error => {
-          console.error('Error fetching quiz data:', error);
+          console.error('Error fetching subjects:', error);
         });
-    }
-  </script>
-</body>
-
-</html>
+  
+      // Event listener for subject selection
+      subjectSelect.addEventListener('change', (event) => {
+        const selectedSubject = event.target.value;
+        fetchQuizData(selectedSubject);
+      });
+  
+      // Function to fetch quiz data based on the selected subject
+      function fetchQuizData(subject) {
+        // Replace the API endpoint with your actual API endpoint to fetch quiz data based on the subject
+        const apiUrl = `/MCQ-sub/${subject}`;
+  
+        // Fetch quiz data from the API endpoint
+        fetch(apiUrl)
+          .then(response => response.json())
+          .then(data => {
+            // Clear previous table data
+            quizTable.tBodies[0].innerHTML = '';
+  
+            // Populate table with new quiz data
+            data.forEach(quiz => {
+              const row = document.createElement('tr');
+              row.innerHTML = `
+                <td>${quiz.id}</td>
+                <td>${quiz.question}</td>
+                <td>${quiz.options}</td>
+                <td>${quiz.answer}</td>
+              `;
+              quizTable.tBodies[0].appendChild(row);
+            });
+          })
+          .catch(error => {
+            console.error('Error fetching quiz data:', error);
+          });
+      }
+    </script>
+  </body>
+  
+  </html>
