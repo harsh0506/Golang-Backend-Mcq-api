@@ -1,6 +1,7 @@
 package main
 
 import (
+	"net/http"
 	"simple-crud-api/controllers"
 	"simple-crud-api/initializers"
 
@@ -15,6 +16,10 @@ func init() {
 func main() {
 
 	r := gin.Default()
+
+	r.GET("/", func(c *gin.Context) {
+		http.ServeFile(c.Writer, c.Request, "index.html")
+	})
 
 	r.POST("/MCQ", controllers.McqsCreate)
 
