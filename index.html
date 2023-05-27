@@ -71,7 +71,7 @@
       fetch('/MCQ-subjectsArray')
         .then(response => response.json())
         .then(data => {
-          data.forEach(subject => {
+          data.mcq.forEach(subject => {
             const option = document.createElement('option');
             option.value = subject;
             option.textContent = subject;
