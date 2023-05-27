@@ -101,7 +101,7 @@
             quizTable.tBodies[0].innerHTML = '';
   
             // Populate table with new quiz data
-            data.forEach(quiz => {
+            data.mcq.forEach(quiz => {
               const row = document.createElement('tr');
               row.innerHTML = `
                 <td>${quiz.id}</td>
